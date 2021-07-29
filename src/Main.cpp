@@ -12,8 +12,8 @@ int main(){
 
     int numAeroportos, numRotas;
 
-    cin >> numAeroportos;       
-
+    cin >> numAeroportos;          
+ 
     Grafo linhaAerea(numAeroportos);
 
     cin >> numRotas;

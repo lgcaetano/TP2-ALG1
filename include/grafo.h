@@ -85,6 +85,8 @@ class Grafo{
     public:
         Grafo(int _numVertices);
 
+        ~Grafo();
+
         int contemAresta(int origem, int destino);
         
         void construirAresta(int origem, int destino);
@@ -109,7 +111,11 @@ class Grafo{
         int numSCCs;
 };
 
-
+Grafo::~Grafo(){
+    if(grafoDeComponentesConectados != nullptr){
+        delete grafoDeComponentesConectados;
+    }
+}
 
 Grafo::Grafo(int _numVertices){
     numVertices = _numVertices;
