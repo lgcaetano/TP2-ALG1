@@ -17,13 +17,27 @@ int max(int x, int y){
         return y;
 }
 
+void imprimirVetor(vector<int> vetor){
+    for(int i = 0; i < (int)vetor.size(); i++){
+        cout << vetor[i] << ' ';
+    }
+    cout << endl;
+}
+
+void imprimirMatriz(vector<vector<int>> matrix){
+    cout << "Matriz" << endl;
+    for(int i = 0; i < (int)matrix.size(); i++){
+        imprimirVetor(matrix[i]);
+    }
+    cout << endl;
+}
 
 
 
 vector<int> copyOfVector(vector<int> vetor){
     int i = 0;
     vector<int> copia;
-    for(i = 0; i < vetor.size(); i++){
+    for(i = 0; i < (int)vetor.size(); i++){
         copia.push_back(vetor[i]);
     }
     return copia;
@@ -43,12 +57,24 @@ bool vectorContainsElement(vector<int> vetor, int element){
 
 bool matrixContainsElement(vector<vector<int>> matriz, int element){
     int i = 0;
-    for(i = 0; i < matriz.size(); i++){
+    for(i = 0; i < (int)matriz.size(); i++){
         if(vectorContainsElement(matriz[i], element)){
             return true;
         }
     }
     return false;
+}
+
+
+void removeVisitedElements(vector<int> &vetor, vector<vector<int>> matriz){
+    int i = 0;
+
+    for(i = 0; i < (int)vetor.size(); i++){
+        if(matrixContainsElement(matriz, vetor[i])){
+            vetor.erase(vetor.begin() + i);
+            i--;
+        }
+    }
 }
 
 
@@ -70,6 +96,8 @@ class Grafo{
         void construirGrafoDeSCCs();
         
         int arestasFaltando();
+
+        void imprimirMatrizDeAdjacencia();
 
     private:
         vector<vector<int>> matrizDeAdjacencia;
@@ -157,33 +185,46 @@ vector<vector<int>> Grafo::algoritmoDeKosaraju(){
 
     while(!verticesEmOrdemDecrescente.empty()){
         currentElement = verticesEmOrdemDecrescente.top();
+
         if(!matrixContainsElement(componentesConectados, currentElement)){
-            componentesConectados.push_back(grafoTransposto.dfs(currentElement, auxiliaryVector, auxiliaryStack));
+
+            grafoTransposto.dfs(currentElement, auxiliaryVector, auxiliaryStack);
+            removeVisitedElements(auxiliaryVector, componentesConectados);
+            componentesConectados.push_back(auxiliaryVector);
         }
+
         verticesEmOrdemDecrescente.pop();
         auxiliaryVector.clear();
         clearStack(auxiliaryStack);
+    
     }
-    numSCCs = componentesConectados.size();
+    
+    numSCCs = (int)componentesConectados.size();
+    
+    // imprimirMatriz(componentesConectados);
+    
     return componentesConectados;    
 }
 
 
 void Grafo::construirGrafoDeSCCs(){
      vector<vector<int>> componentesConectados = algoritmoDeKosaraju();
-     grafoDeComponentesConectados = new Grafo(componentesConectados.size());
+    //  imprimirMatriz(componentesConectados);
+     grafoDeComponentesConectados = new Grafo((int)componentesConectados.size());
      int i = 0, j = 0, k = 0, t = 0;
-     for(i = 0; i < componentesConectados.size(); i++){
-         for(j = 0; j < componentesConectados[i].size(); j++){
-             for(k = 0; k < componentesConectados.size(); k++){
-                 for(t = 0; t < componentesConectados[k].size(); t++){
+     for(i = 0; i < (int)componentesConectados.size(); i++){
+         for(j = 0; j < (int)componentesConectados[i].size(); j++){
+             for(k = 0; k < (int)componentesConectados.size(); k++){
+                 for(t = 0; t < (int)componentesConectados[k].size(); t++){
                      if(k != i && contemAresta(componentesConectados[i][j], componentesConectados[k][t])){
-                         grafoDeComponentesConectados->construirAresta(i, k);
+                         grafoDeComponentesConectados->construirAresta(i + 1, k + 1);
                      }
                 }
             }
         }
     }
+
+    // grafoDeComponentesConectados->imprimirMatrizDeAdjacencia();
 }
 
 
@@ -199,12 +240,12 @@ int Grafo::numVerticesSemSaida(){
 
 int Grafo::numVerticesSemChegada(){
     int i = 0, j = 0;
-    int resultado = 0;
+    int resultado = numVertices;
 
     for(i = 0; i < numVertices; i++){
         for(j = 0; j < numVertices; j++){
             if(matrizDeAdjacencia[j][i] == 1){
-                resultado++;
+                resultado--;
                 break;
             }
         }
@@ -222,6 +263,10 @@ int Grafo::arestasFaltando(){
     }
 }
 
+
+void Grafo::imprimirMatrizDeAdjacencia(){
+    imprimirMatriz(matrizDeAdjacencia);
+}
 
 
 

@@ -12,7 +12,7 @@ int main(){
 
     int numAeroportos, numRotas;
 
-    cin >> numAeroportos;
+    cin >> numAeroportos;       
 
     Grafo linhaAerea(numAeroportos);
 
@@ -20,7 +20,7 @@ int main(){
 
     int i = 0;
 
-    int origem, destino;
+    int origem, destino;          
 
     for(i = 0; i < numRotas; i++){
         cin >> origem;
@@ -30,5 +30,5 @@ int main(){
 
     cout << linhaAerea.arestasFaltando() << endl;
 
-    return 1;
-}
+    return 1;            
+}       
