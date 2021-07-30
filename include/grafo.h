@@ -262,6 +262,8 @@ int Grafo::numVerticesSemChegada(){
 int Grafo::arestasFaltando(){
     if(grafoDeComponentesConectados == nullptr)
         construirGrafoDeSCCs();
+    if(numSCCs == 1)
+        return 0;
     if(numVertices == numSCCs){
         return max(numVerticesSemChegada(), numVerticesSemSaida());
     } else {

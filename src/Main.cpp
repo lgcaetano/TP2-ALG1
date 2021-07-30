@@ -18,7 +18,7 @@ int main(){
 
     cin >> numRotas;
 
-    int i = 0;
+    int i = 0;    
 
     int origem, destino;          
 

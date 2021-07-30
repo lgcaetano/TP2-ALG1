@@ -1,0 +1,20 @@
+
+ComponentesConectados <- Grafo.Kosaraju();
+PARA1 i de 0 até ComponentesConectados.size:
+    PARA2 j de 0 até ComponentesConectados.size:
+        SE i != j e ComponentesConectados[i].possuiArestaAté(ComponentesConectados[j]):
+            GrafoDeSCCs.desenharArestaEntre(i, j);
+    FIM PARA2;
+FIM PARA1;
+
+numVerticesSemSaida <- 0;
+numVerticesSemChegada <- 0;
+
+PARA1 i de 0 até ComponentesConectados.size:
+    SE GrafoDeSCCs.vertice(i).naoPossuiArestaDeSaida:
+        numVerticesSemSaida++;
+    SE GrafoDeSCCs.vertice(i).naoPossuiArestaDeChegada:
+        numVerticesSemChegada++;
+FIM PARA1;
+
+return max(numVerticesSemChegada, numVerticesSemSaida);
